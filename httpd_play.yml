@@ -1,0 +1,23 @@
+- hosts: web
+  tasks:
+          - name: "Installing httpd"
+            package:
+                    name: "httpd"
+                    state: present
+
+          - name: "Copying webpages"
+            template:
+                    src: "/root/ansiblews/index.html"
+                    dest: "/var/www/html"
+          - name: "Copying Configuration file"
+            template:
+                    src: "/root/ansiblews/configuration.conf.j2"
+                    dest: "/etc/httpd/conf.d/configuration.conf"
+            notify: restarting service
+
+ 
+  handlers: 
+          - name: "restarting service"
+            service:
+                    name: "httpd"
+                    state: restarted
